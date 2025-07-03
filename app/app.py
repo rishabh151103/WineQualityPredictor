@@ -4,14 +4,15 @@ import numpy as np
 import joblib
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
 # Load model and scaler
-model = joblib.load("xgboost_model.pkl")
-scaler = joblib.load("scaler.pkl")
+base_path = "app/" if os.path.exists("app/xgboost_model.pkl") else ""
 
-# Load full dataset for slider ranges
-red = pd.read_csv("winequality-red.csv", sep=';')
-white = pd.read_csv("winequality-white.csv", sep=';')
+model = joblib.load(os.path.join(base_path, "xgboost_model.pkl"))
+scaler = joblib.load(os.path.join(base_path, "scaler.pkl"))
+red = pd.read_csv(os.path.join(base_path, "winequality-red.csv"), sep=';')
+white = pd.read_csv(os.path.join(base_path, "winequality-white.csv"), sep=';')
 full_data = pd.concat([red, white], ignore_index=True)
 
 st.set_page_config(page_title="🍷 Wine Quality Predictor", layout="centered")
