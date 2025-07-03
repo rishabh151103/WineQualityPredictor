@@ -4,27 +4,28 @@ import numpy as np
 import joblib
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
+# Load model and scaler (use forward slashes or os.path.join for compatibility)
+model = joblib.load("saved_model/xgboost_model.pkl")
+scaler = joblib.load("saved_model/scaler.pkl")
 
-# Load model and scaler
-
-
-model = joblib.load(r"C:\Users\nitis\OneDrive\Documents\WineQaulityPredictor\saved_model\xgboost_model.pkl")
-scaler = joblib.load(r"C:\Users\nitis\OneDrive\Documents\WineQaulityPredictor\saved_model\scaler.pkl")
-red = pd.read_csv(( r"C:\Users\nitis\OneDrive\Documents\WineQaulityPredictor\dataset\winequality-red.csv"), sep=';')
-white = pd.read_csv((r"C:\Users\nitis\OneDrive\Documents\WineQaulityPredictor\dataset\winequality-white.csv"), sep=';')
+# Load datasets
+red = pd.read_csv("dataset/winequality-red.csv", sep=';')
+white = pd.read_csv("dataset/winequality-white.csv", sep=';')
 full_data = pd.concat([red, white], ignore_index=True)
 
+# Set up Streamlit UI
 st.set_page_config(page_title="🍷 Wine Quality Predictor", layout="centered")
-
 st.title("🍷 Wine Quality Prediction App")
 st.markdown("Predict whether a wine is **Bad**, **Average**, or **Good** based on its properties using a trained XGBoost model.")
 
 st.sidebar.header("Input Wine Features")
 
-# Use feature columns except target
+# Extract feature names (exclude the target column)
 feature_names = full_data.columns[:-1]
 
+# Function for creating sliders
 def get_slider(name):
     min_val = float(full_data[name].min())
     max_val = float(full_data[name].max())
@@ -36,17 +37,18 @@ def get_slider(name):
         value=round(mean_val, 2)
     )
 
-# Take user input
+# Collect user inputs from sliders
 user_inputs = [get_slider(name) for name in feature_names]
 input_df = pd.DataFrame([user_inputs], columns=feature_names)
 
-# Scale the input
+# Scale the input features
 scaled_input = scaler.transform(input_df)
 
 # Make prediction
 pred_class = model.predict(scaled_input)[0]
 pred_proba = model.predict_proba(scaled_input)[0]
 
+# Map classes to labels
 label_map = {
     0: "Bad Quality (3–5)",
     1: "Average Quality (6)",
@@ -57,7 +59,7 @@ label_map = {
 st.subheader("🔍 Prediction Result")
 st.success(f"**Predicted Quality:** {label_map[pred_class]}")
 
-# Show probability bar chart
+# Show prediction probabilities
 st.subheader("📈 Prediction Confidence")
 conf_df = pd.DataFrame({
     "Class": [label_map[i] for i in range(3)],
