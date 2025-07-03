@@ -63,21 +63,28 @@ A machine learning project that classifies wine quality (Bad, Average, Good) usi
 ```
 WineQualityPredictor/
 │
-├── Saved_model/
-│   ├── xgboost_model.pkl   
-│   ├── scaler.pkl           # Fitted PowerTransformer
-
+├── saved_model/
+│   ├── xgboost_model.pkl         # Trained XGBoost classifier
+│   └── scaler.pkl                # PowerTransformer or StandardScaler used for scaling
+│
 ├── dataset/
-│   ├── winequality-red.csv
-│   └── winequality-white.csv
+│   ├── winequality-red.csv       # Red wine data
+│   └── winequality-white.csv     # White wine data
 │
 ├── notebooks/
-│   ├── logistic_regression.ipynb
-│   ├── svm_classifier.ipynb
-│   ├── random_forest.ipynb
-│   └── ... other model experiments
-│   ├── app.py
-└── README.md
+│   ├── logistic_regression.ipynb     # Logistic Regression experiment
+│   ├── svm_classifier.ipynb          # SVM Classifier experiment
+│   ├── random_forest.ipynb           # Random Forest experiment
+│   ├── gradient_boosting.ipynb       # Gradient Boosting experiment
+│   ├── xgboost_model.ipynb           # Final XGBoost model training
+│   ├── knn_classifier.ipynb          # K-Nearest Neighbors experiment
+│   ├── decision_tree.ipynb           # Decision Tree Classifier experiment
+│   └── stacking_ensemble.ipynb       # Stacked model using best classifiers
+│
+├── app.py                            # Streamlit web app script
+├── README.md                         # Project overview and documentation
+└── requirements.txt                  # List of dependencies
+
 
 ```
 
